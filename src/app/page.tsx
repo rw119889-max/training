@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { recipes } from "@/data/recipes";
+import Badge from "@/components/badge";
 import { exercises } from "@/data/exercises";
 import { knowledgeCards } from "@/data/knowledge";
+import { recipes } from "@/data/recipes";
 
 // 首页先展示数据集前 3 项；具体训练记录仍由原有训练 App 维护。
 const quickMeals = recipes.slice(0, 3);
-const todayExercises = exercises.slice(0, 3);
+const quickExercises = exercises.slice(0, 3);
 const recommendedKnowledge = knowledgeCards.slice(0, 3);
 
 export default function Home() {
@@ -17,11 +18,11 @@ export default function Home() {
         <p className="mt-2 text-sm text-slate-500">快速查动作、找一餐简单又营养的选择。</p>
       </header>
 
-      <section aria-labelledby="today-workout" className="rounded-2xl bg-emerald-700 p-5 text-white shadow-sm">
-        <p className="text-sm text-emerald-100">今日训练动作参考</p>
-        <h2 id="today-workout" className="mt-1 text-lg font-semibold">从动作库快速查看要领</h2>
+      <section aria-labelledby="quick-exercises" className="rounded-2xl bg-emerald-700 p-5 text-white shadow-sm">
+        <p className="text-sm text-emerald-100">动作速查</p>
+        <h2 id="quick-exercises" className="mt-1 text-lg font-semibold">从动作库快速查看要领</h2>
         <ul className="mt-4 space-y-2">
-          {todayExercises.map((exercise) => (
+          {quickExercises.map((exercise) => (
             <li key={exercise.id}>
               <Link href={`/exercises/${exercise.id}`} className="flex items-center justify-between rounded-xl bg-white/10 px-3 py-2 text-sm hover:bg-white/15">
                 <span>{exercise.name}</span>
@@ -30,7 +31,7 @@ export default function Home() {
             </li>
           ))}
         </ul>
-        <p className="mt-3 text-xs leading-5 text-emerald-100">这是动作参考清单，不代表已同步或安排了你的今日训练。</p>
+        <p className="mt-3 text-xs leading-5 text-emerald-100">这里只是常用动作参考，你的训练安排仍由训练 App 维护。</p>
         <Link href="/exercises" className="mt-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800">打开动作库</Link>
       </section>
 
@@ -49,7 +50,7 @@ export default function Home() {
                 <h3 className="font-semibold">{meal.name}</h3>
                 <p className="mt-1 text-sm text-slate-500">{meal.timeMinutes} 分钟 · 约 {meal.proteinG}g 蛋白质</p>
               </div>
-              <span className="ml-3 shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">{meal.tags[0]}</span>
+              <span className="ml-3 shrink-0"><Badge>{meal.tags[0]}</Badge></span>
             </Link>
           ))}
         </div>
@@ -66,7 +67,7 @@ export default function Home() {
         <div className="space-y-3">
           {recommendedKnowledge.map((card) => (
             <Link key={card.id} href={`/knowledge/${card.id}`} className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-emerald-200">
-              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800">{card.category}</span>
+              <Badge>{card.category}</Badge>
               <h3 className="mt-3 font-semibold">{card.title}</h3>
               <p className="mt-1 text-sm leading-6 text-slate-500">{card.summary}</p>
             </Link>

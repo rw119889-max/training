@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import BottomNav from "@/components/bottom-nav";
+import ServiceWorkerRegister from "@/components/service-worker-register";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "训练与营养助手",
-  description: "个人训练与营养辅助工具",
+  title: {
+    default: "训练与营养助手",
+    template: "%s · 训练与营养助手",
+  },
+  description: "个人训练与营养辅助工具：动作要领、快手食谱与训练营养知识。",
+  appleWebApp: {
+    capable: true,
+    title: "训练营养助手",
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#047857",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -29,6 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </div>
         <BottomNav />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

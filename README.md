@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 训练与营养助手（training-nutrition-mvp）
 
-## Getting Started
+移动端优先的个人训练与营养辅助 Web 应用：快速查动作要领、找一餐简单高蛋白的选择、随手翻训练与营养知识。
 
-First, run the development server:
+## 功能
+
+- **首页**：动作速查、推荐快速餐、推荐知识
+- **动作库**：按动作名称 / 目标肌群搜索，查看动作要点与常见错误
+- **食谱库**：快手高蛋白食谱，食材清单与制作步骤
+- **知识库**：训练原则 / 营养基础 / 恢复 / 常见误区，支持分类筛选与全文搜索
+- **我的**：本机收藏（localStorage，不上传服务器）
+- **PWA**：可添加到手机主屏幕，生产环境提供离线兜底页
+
+## 技术栈
+
+- Next.js 16（App Router + Turbopack）
+- React 19
+- Tailwind CSS 4
+- TypeScript（strict）
+
+## 本地开发
+
+需要 Node.js >= 20.9。
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 http://localhost:3000。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 常用脚本
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| 命令 | 说明 |
+| --- | --- |
+| `npm run dev` | 启动开发服务器 |
+| `npm run build` | 生产构建 |
+| `npm run start` | 启动生产服务（需先 build） |
+| `npm run lint` | ESLint 检查 |
+| `npm run typecheck` | TypeScript 类型检查 |
 
-## Learn More
+## 目录结构
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/                  # 页面路由（App Router）
+    exercises/          # 动作库列表与详情
+    recipes/            # 食谱库列表与详情
+    knowledge/          # 知识库列表与详情
+    profile/            # 我的（本机收藏）
+    loading.tsx         # 全局加载骨架
+    error.tsx           # 错误边界
+    not-found.tsx       # 404 页面
+    manifest.ts         # PWA manifest
+  components/           # 通用组件与各列表的客户端搜索组件
+  data/                 # 动作 / 食谱 / 知识数据（TypeScript 数组）
+public/
+  sw.js                 # Service Worker（仅生产环境注册）
+  icons/                # PWA 图标
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 维护数据
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+动作、食谱、知识内容都在 `src/data/` 下的 TypeScript 数组里，修改后开发服务器会自动热更新。新增条目时保持 `id` 唯一且稳定，详情页链接依赖它。
 
-## Deploy on Vercel
+## 部署
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+可部署到 Vercel 或任意支持 Node.js 的环境：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+npm run start
+```
+
+离线缓存（`public/sw.js`）只在生产环境注册；每次发布若要强制刷新缓存，修改 `sw.js` 里的 `CACHE_VERSION`。
